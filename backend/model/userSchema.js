@@ -77,7 +77,7 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.comparePassword = async function (plainPassword) {
   return await bcrypt.compare(plainPassword, this.password);
 };
-userSchema.methods.generateJsonWebToken = function (plainPassword) {
+userSchema.methods.generateJsonWebToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES,
   });
