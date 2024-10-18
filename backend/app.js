@@ -5,6 +5,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
 import { DBConnection } from './database/DBConnection.js';
+import { errorMiddleware } from './middleware/errorHandler.js';
+import userRouter from './router/userRoutes.js';
 const app = express();
 
 // Config ENV
@@ -33,5 +35,12 @@ app.use(
   })
 );
 
+// Routes
+
+app.use('/api/v1/user', userRouter);
+
 DBConnection();
+
+// Error Hanlder Middleware
+app.use(errorMiddleware);
 export default app;
