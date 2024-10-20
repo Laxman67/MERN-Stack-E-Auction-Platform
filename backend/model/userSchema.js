@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema(
   {
-    username: {
+    userName: {
       type: String,
       minLength: [3, 'Username must contain atleast 3 Characters'],
       maxLength: [40, 'Username cannot exceed 40 Characters'],
@@ -20,7 +20,7 @@ const userSchema = new Schema(
     phone: {
       type: String,
       minLength: [10, 'Phone number must contain atleast 8 Characters'],
-      maxLength: [10, 'Phone number cannot exceed 32 Characters'],
+      maxLength: [10, 'Phone number cannot exceed 10 Characters'],
     },
     profileImage: {
       public_id: {
