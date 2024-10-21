@@ -7,6 +7,7 @@ import fileUpload from 'express-fileupload';
 import { DBConnection } from './database/DBConnection.js';
 import { errorMiddleware } from './middleware/errorHandler.js';
 import userRouter from './router/userRoutes.js';
+import auctionRouter from './router/auctionIteRoute.js';
 const app = express();
 
 // Config ENV
@@ -38,6 +39,7 @@ app.use(
 // Routes
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/auctionitem', auctionRouter);
 
 DBConnection();
 
