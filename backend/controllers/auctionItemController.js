@@ -2,7 +2,7 @@ import catchAsyncErrors from '../middleware/catchAsyncErrors.js';
 import Auction from '../model/auctionSchema.js';
 import { ErrorHandler } from '../middleware/errorHandler.js';
 import cloudinary from 'cloudinary';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 import User from '../model/userSchema.js';
 
 export const addAuctionItem = catchAsyncErrors(async (req, res, next) => {
@@ -175,63 +175,66 @@ export const removeFromAuction = catchAsyncErrors(async (req, res, next) => {
 });
 export const republishItem = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
-
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return next(new ErrorHandler('Invalid Id Format', 400));
+    return next(new ErrorHandler('Invalid Id format.', 400));
   }
-
   let auctionItem = await Auction.findById(id);
-
   if (!auctionItem) {
-    return next(new ErrorHandler('Auction not Found !', 400));
+    return next(new ErrorHandler('Auction not found.', 404));
   }
-  if (auctionItem.endTime > Date.now()) {
+  if (!req.body.startTime || !req.body.endTime) {
     return next(
-      new ErrorHandler('Auction is Already Active , cannot Re-Publish', 400)
+      new ErrorHandler('Starttime and Endtime for republish is mandatory.')
     );
   }
-
-  const data = {
+  if (new Date(auctionItem.endTime) > Date.now()) {
+    return next(
+      new ErrorHandler('Auction is already active, cannot republish', 400)
+    );
+  }
+  let data = {
     startTime: new Date(req.body.startTime),
     endTime: new Date(req.body.endTime),
   };
-
   if (data.startTime < Date.now()) {
     return next(
-      new ErrorHandler('Start Time must be Greater then Present Time')
+      new ErrorHandler(
+        'Auction starting time must be greater than present time',
+        400
+      )
+    );
+  }
+  if (data.startTime >= data.endTime) {
+    return next(
+      new ErrorHandler(
+        'Auction starting time must be less than ending time.',
+        400
+      )
     );
   }
 
-  if (data.startTime >= data.endTime) {
-    return next(new ErrorHandler('Start Time must be Less then Present Time'));
-  }
-
   data.bids = [];
-  data.commisionCalculated = false;
+  data.commissionCalculated = false;
+
   auctionItem = await Auction.findByIdAndUpdate(id, data, {
     new: true,
-    runValidators: false,
+    runValidators: true,
     useFindAndModify: false,
   });
 
   const createdBy = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      unpaidCommission: 0,
-    },
+    req.user._id,
+    { unpaidCommission: 0 },
     {
       new: true,
       runValidators: false,
       useFindAndModify: false,
     }
   );
-
-  await createdBy.save();
-
   res.status(200).json({
     success: true,
     auctionItem,
-    message: `Auction Republish and will be active on ${req.body.startTime}`,
+    message: `Auction republished and will be active on ${req.body.startTime}`,
     createdBy,
   });
 });
