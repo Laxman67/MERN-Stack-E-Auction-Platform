@@ -3,6 +3,7 @@ import Auction from '../model/auctionSchema.js';
 import { ErrorHandler } from '../middleware/errorHandler.js';
 import cloudinary from 'cloudinary';
 import mongoose, { ObjectId } from 'mongoose';
+import User from '../model/userSchema.js';
 
 export const addAuctionItem = catchAsyncErrors(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
@@ -137,6 +138,100 @@ export const getAuctionDetails = catchAsyncErrors(async (req, res, next) => {
     bidders,
   });
 });
-export const getMyAuctionItems = catchAsyncErrors(async (req, res, next) => {});
-export const removeFromAuction = catchAsyncErrors(async (req, res, next) => {});
-export const republishItem = catchAsyncErrors(async (req, res, next) => {});
+export const getMyAuctionItems = catchAsyncErrors(async (req, res, next) => {
+  const items = await Auction.find({ createdBy: req.user.id });
+
+  res.status(201).json({
+    success: true,
+    items,
+  });
+});
+export const removeFromAuction = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next(new ErrorHandler('Invalid Id Format', 400));
+  }
+
+  const auctionItem = await Auction.findById(id);
+
+  if (!auctionItem) {
+    return next(new ErrorHandler('Auction not Found !', 400));
+  }
+
+  // TODO
+
+  try {
+    await cloudinary.uploader.destroy(auctionItem.image.public_id); // Uses image's public_id for deletion
+  } catch (error) {
+    console.error('Error deleting image:', error); // Logs the error if something goes wrong
+  }
+
+  await auctionItem.deleteOne();
+  res.status(200).json({
+    success: true,
+    message: 'Auction Item Deleted Successfully',
+  });
+});
+export const republishItem = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next(new ErrorHandler('Invalid Id Format', 400));
+  }
+
+  let auctionItem = await Auction.findById(id);
+
+  if (!auctionItem) {
+    return next(new ErrorHandler('Auction not Found !', 400));
+  }
+  if (auctionItem.endTime > Date.now()) {
+    return next(
+      new ErrorHandler('Auction is Already Active , cannot Re-Publish', 400)
+    );
+  }
+
+  const data = {
+    startTime: new Date(req.body.startTime),
+    endTime: new Date(req.body.endTime),
+  };
+
+  if (data.startTime < Date.now()) {
+    return next(
+      new ErrorHandler('Start Time must be Greater then Present Time')
+    );
+  }
+
+  if (data.startTime >= data.endTime) {
+    return next(new ErrorHandler('Start Time must be Less then Present Time'));
+  }
+
+  data.bids = [];
+  data.commisionCalculated = false;
+  auctionItem = await Auction.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: false,
+    useFindAndModify: false,
+  });
+
+  const createdBy = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      unpaidCommission: 0,
+    },
+    {
+      new: true,
+      runValidators: false,
+      useFindAndModify: false,
+    }
+  );
+
+  await createdBy.save();
+
+  res.status(200).json({
+    success: true,
+    auctionItem,
+    message: `Auction Republish and will be active on ${req.body.startTime}`,
+    createdBy,
+  });
+});

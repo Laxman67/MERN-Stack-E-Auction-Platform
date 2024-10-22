@@ -2,6 +2,7 @@ import {
   addAuctionItem,
   getAllItems,
   getAuctionDetails,
+  getMyAuctionItems,
   removeFromAuction,
   republishItem,
 } from '../controllers/auctionItemController.js';
@@ -18,7 +19,13 @@ auctionRouter.post(
   addAuctionItem
 );
 auctionRouter.get('/allitems', getAllItems);
-auctionRouter.get('/auction/:id', isAuthenticated, getAuctionDetails);
+auctionRouter.get(
+  '/myitems',
+  isAuthenticated,
+  isAuthorised('Auctioneer'),
+  getMyAuctionItems
+);
+
 auctionRouter.delete(
   '/delete/:id',
   isAuthenticated,
@@ -26,7 +33,7 @@ auctionRouter.delete(
   removeFromAuction
 );
 auctionRouter.put(
-  '/item/republush/:id',
+  '/item/republish/:id',
   isAuthenticated,
   isAuthorised('Auctioneer'),
   republishItem
