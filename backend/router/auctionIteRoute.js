@@ -7,6 +7,7 @@ import {
   republishItem,
 } from '../controllers/auctionItemController.js';
 import { isAuthenticated, isAuthorised } from '../middleware/auth.js';
+import trackCommisionStatus from '../middleware/trackCommission.js';
 
 import express from 'express';
 
@@ -36,6 +37,7 @@ auctionRouter.put(
   '/item/republish/:id',
   isAuthenticated,
   isAuthorised('Auctioneer'),
+  trackCommisionStatus,
   republishItem
 );
 

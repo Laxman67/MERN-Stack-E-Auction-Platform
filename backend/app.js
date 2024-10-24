@@ -8,6 +8,7 @@ import { DBConnection } from './database/DBConnection.js';
 import { errorMiddleware } from './middleware/errorHandler.js';
 import userRouter from './router/userRoutes.js';
 import auctionRouter from './router/auctionIteRoute.js';
+import bidRouter from './router/bidRoute.js';
 const app = express();
 
 // Config ENV
@@ -40,6 +41,7 @@ app.use(
 
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auctionitem', auctionRouter);
+app.use('/api/v1/bid', bidRouter);
 
 DBConnection();
 
