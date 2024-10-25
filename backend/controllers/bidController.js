@@ -65,6 +65,8 @@ export const placeBid = catchAsyncErrors(async (req, res, next) => {
         profileImage: bidderDetail.profileImage?.url,
         amount,
       });
+
+      auctionItem.currentBid = amount;
     }
 
     await auctionItem.save({ suppressWarning: true });
