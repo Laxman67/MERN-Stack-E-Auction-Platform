@@ -63,7 +63,7 @@ const userSchema = new Schema(
       default: 0,
     },
   },
-  { stamp: true }
+  { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {

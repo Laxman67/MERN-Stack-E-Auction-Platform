@@ -10,6 +10,7 @@ import userRouter from './router/userRoutes.js';
 import auctionRouter from './router/auctionIteRoute.js';
 import bidRouter from './router/bidRoute.js';
 import commissionRouter from './router/commissionRoute.js';
+import superAdminRouter from './router/superAdminRoute.js';
 const app = express();
 
 // Config ENV
@@ -44,6 +45,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auctionitem', auctionRouter);
 app.use('/api/v1/bid', bidRouter);
 app.use('/api/v1/commission', commissionRouter);
+app.use('/api/v1/superadmin', superAdminRouter);
 
 DBConnection();
 
