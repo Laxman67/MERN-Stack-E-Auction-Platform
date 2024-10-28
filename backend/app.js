@@ -1,6 +1,9 @@
 import { config } from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+
+//TODO to test
+import { sendEmail } from './utils/email.js';
 //
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
@@ -38,6 +41,12 @@ app.use(
     tempFileDir: '/tmp/',
   })
 );
+
+// await sendEmail({
+//   recipent: 'xxxxxxx@gmail.com',
+//   subject: 'Hello From Laxman',
+//   text: 'ONLY TEXR>>>>',
+// });
 
 // Routes
 
