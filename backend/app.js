@@ -2,8 +2,6 @@ import { config } from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 
-//TODO to test
-import { sendEmail } from './utils/email.js';
 //
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
@@ -14,6 +12,10 @@ import auctionRouter from './router/auctionIteRoute.js';
 import bidRouter from './router/bidRoute.js';
 import commissionRouter from './router/commissionRoute.js';
 import superAdminRouter from './router/superAdminRoute.js';
+
+import { endedAuctionCron } from './automation/endedAuctionCron.js';
+import { verifyCommissionCron } from './automation/verifyCommissionCron.js';
+
 const app = express();
 
 // Config ENV
@@ -55,6 +57,9 @@ app.use('/api/v1/auctionitem', auctionRouter);
 app.use('/api/v1/bid', bidRouter);
 app.use('/api/v1/commission', commissionRouter);
 app.use('/api/v1/superadmin', superAdminRouter);
+
+endedAuctionCron();
+verifyCommissionCron();
 
 DBConnection();
 

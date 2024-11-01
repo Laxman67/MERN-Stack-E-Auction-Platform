@@ -213,14 +213,24 @@ export const republishItem = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
+  if (auctionItem.highestBidder) {
+    const highestBidder = await User.findById(auctionItem.highestBidder);
+    highestBidder.moneySpent -= auctionItem.currentBid;
+    highestBidder.auctionsWon -= -1;
+    highestBidder.save();
+  }
+
   data.bids = [];
   data.commissionCalculated = false;
-
+  data.currentBid = 0;
+  data.highestBidder = null;
   auctionItem = await Auction.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
   });
+
+  await Bid.deleteMany({ auctionItem: auctionItem._id });
 
   const createdBy = await User.findByIdAndUpdate(
     req.user._id,

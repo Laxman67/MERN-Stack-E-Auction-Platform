@@ -13,7 +13,6 @@ const userSchema = new Schema(
       type: String,
       selected: false,
       minLength: [8, 'Password must contain atleast 8 Characters'],
-      maxLength: [32, 'Password cannot exceed 32 Characters'],
     },
     email: String,
     phone: String,
