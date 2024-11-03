@@ -253,7 +253,9 @@ const Signup = () => {
             </div>
 
             <button
-              className='bg-[#d6482b] font-semibold hover:bg-[#b8381e] transition-all duration-150 text-xl py-2 px-4 rounded-sm w-[280px] lg:w-[640px] mx-auto'
+              className={`bg-[#d6482b]  text-white my-4 font-semibold hover:bg-[#b8381e] transition-all duration-150 text-xl py-2 px-4 rounded-sm w-[280px] lg:w-[640px] mx-auto ${
+                loading ? 'cursor-not-allowed' : ''
+              }`}
               type='submit'
               disabled={loading}
             >
