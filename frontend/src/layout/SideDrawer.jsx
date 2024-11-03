@@ -3,11 +3,12 @@ import { RiAuctionFill } from 'react-icons/ri';
 import { MdLeaderboard, MdDashboard } from 'react-icons/md';
 import { SiGooglesearchconsole } from 'react-icons/si';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
+import { FaGithub } from 'react-icons/fa';
 import { FaFacebook } from 'react-icons/fa';
 import { RiInstagramFill } from 'react-icons/ri';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdCloseCircleOutline, IoIosCreate } from 'react-icons/io';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
 import { FaFileInvoiceDollar } from 'react-icons/fa6';
 import { FaEye } from 'react-icons/fa';
 // React redux
@@ -26,6 +27,7 @@ const SideDrawer = () => {
 
   return (
     <>
+      {/* To Right Corner Drawer Icon */}
       <div
         onClick={() => setShow(!show)}
         className='fixed right-5 bg-[#d6482b] text-white text-3xl p-2 rounded-md hover:bg-[#b8381e] lg:hidden'
@@ -115,10 +117,16 @@ const SideDrawer = () => {
 
           {!isAuthenticated ? (
             <div className='my-4 flex gap-2'>
-              <Link to='/sign-up'>
+              <Link
+                to='/sign-up'
+                className='bg-[#D6482B] font-semibold hover:bg-[#b8381e] text-xl py-1 px-4 rounded-md text-white'
+              >
                 <b>Sign Up</b>
               </Link>
-              <Link to='/login'>
+              <Link
+                to='/login'
+                className='text-[#DECCBE] bg-transparent border-[#DECCBE] border-2 hover:bg-[#fffefd] hover:text-[#fdba88] font-bold text-xl py-1 px-4 rounded-md'
+              >
                 <b>Login</b>
               </Link>
             </div>
@@ -149,8 +157,51 @@ const SideDrawer = () => {
 
           <IoMdCloseCircleOutline
             onClick={() => setShow(!show)}
-            className='absolute top-0 right-5 text-[28px] sm:hidden '
+            className='absolute top-0 right-5 text-[28px] sm:hidden'
           />
+        </div>
+
+        <div>
+          <div className='flex gap-2 items-center mb-2'>
+            <Link
+              to='/'
+              className='bg-white text-stone-500 p-2 text-xl rounded-sm hover:text-blue-700'
+            >
+              <FaFacebook />
+            </Link>
+            <Link
+              to='/'
+              className='bg-white text-stone-500 p-2 text-xl rounded-sm hover:text-pink-500'
+            >
+              <RiInstagramFill />
+            </Link>
+            <Link
+              to='/'
+              className='bg-white text-stone-500 p-2 text-xl rounded-sm hover:text-blue-600'
+            >
+              <FaLinkedin />
+            </Link>
+            <Link
+              to='/'
+              className='bg-white text-stone-500 p-2 text-xl rounded-sm hover:text-black'
+            >
+              <FaGithub />
+            </Link>
+          </div>
+
+          <Link
+            to='/contact'
+            className=' text-stone-500  font-semibold hover:text-[#d6482b] hover:transition-all duration-150 '
+          >
+            Contact Us
+          </Link>
+
+          <p className='text-stone-500 '>&copy; PrimeBid LLC.</p>
+          <p className='text-stone-500  font-semibold hover:text-[#d6482b] hover:transition-all duration-150 '>
+            <Link to='/' className=''>
+              Design By Laxman
+            </Link>
+          </p>
         </div>
       </div>
     </>
