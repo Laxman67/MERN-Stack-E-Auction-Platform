@@ -39,7 +39,11 @@ const SubmitCommission = () => {
             className='flex flex-col gap-5 w-full'
             onSubmit={handlePaymentProof}
           >
-            <h3>Upload Payment Proof</h3>
+            <h3
+              className={`text-[#D6482B] text-xl font-semibold mb-2 min-[480px]:text-xl md:text-2xl lg:text-3xl`}
+            >
+              Upload Payment Proof
+            </h3>
 
             <div className='flex flex-col gap-2'>
               <label className='text-[16px] text-stone-500'>Amount</label>
@@ -69,7 +73,7 @@ const SubmitCommission = () => {
 
               <div className='h-[100px] mx-auto'>
                 <img
-                  className='h-[100%]'
+                  className=' rounded-sm h-[100%] sm:hover:scale-150 transition-all duration-150'
                   src={proofPreview ? proofPreview : ''}
                   alt='Proof Preview'
                 />
