@@ -6,8 +6,8 @@ import { sendEmail } from '../utils/email.js';
 
 export const verifyCommissionCron = () => {
   cron.schedule('*/1 * * * *', async () => {
+    console.log('Running Verify Commission Cron...');
     const approvedProofs = await PaymentProof.find({ status: 'Approved' });
-
     for (const proof of approvedProofs) {
       try {
         const user = await User.findById(proof.userId);

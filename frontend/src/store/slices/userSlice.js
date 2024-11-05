@@ -66,6 +66,18 @@ const userSlice = createSlice({
     logoutFailed(state) {
       state.loading = false;
     },
+    fetchLeaderboardRequest(state) {
+      state.loading = true;
+      state.leaderboard = [];
+    },
+    fetchLeaderboardSuccess(state, action) {
+      state.loading = false;
+      state.leaderboard = action.payload;
+    },
+    fetchLeaderboardFailed(state) {
+      state.loading = false;
+      state.leaderboard = [];
+    },
     clearAllErrors(state) {
       state.loading = false;
       //   keep same all rest
@@ -134,6 +146,24 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(userSlice.actions.fetchUserFailed());
+    toast.error(error.response.data.message);
+    dispatch(userSlice.actions.clearAllErrors());
+    console.error(error);
+  }
+};
+export const fetchLeaderboard = () => async (dispatch) => {
+  dispatch(userSlice.actions.fetchLeaderboardRequest());
+  try {
+    const response = await axios.get(`${BACKEND_URL}/leaderboard`, {
+      withCredentials: true,
+    });
+
+    dispatch(
+      userSlice.actions.fetchLeaderboardSuccess(response.data.leaderboard)
+    );
+    dispatch(userSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(userSlice.actions.fetchLeaderboardFailed());
     toast.error(error.response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
     console.error(error);

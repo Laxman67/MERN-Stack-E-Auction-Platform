@@ -56,7 +56,7 @@ const SideDrawer = () => {
             {/* Auction */}
             <li>
               <Link
-                to='/auction'
+                to='/auctions'
                 className='flex text-xl gap-2 font-semibold items-center hover:text-[#d4682b] hover:transition-all hover:duration-150'
               >
                 <RiAuctionFill /> Auctions
@@ -65,7 +65,7 @@ const SideDrawer = () => {
             {/* Leaderboard */}
             <li>
               <Link
-                to='/leaderbaord'
+                to='/leaderboard'
                 className='flex text-xl gap-2 font-semibold items-center hover:text-[#d4682b] hover:transition-all hover:duration-150'
               >
                 <MdLeaderboard /> Leaderboard

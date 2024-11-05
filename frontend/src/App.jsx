@@ -10,9 +10,13 @@ import Login from './pages/Login';
 import SubmitCommission from './pages/SubmitCommission';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchUser } from './store/slices/userSlice';
+import { fetchLeaderboard, fetchUser } from './store/slices/userSlice';
 import HowItWorks from './pages/HowItWorks';
 import About from './pages/About';
+import { getAllAuctionItems } from './store/slices/AuctionSlice';
+import Leaderboard from './pages/Leaderboard';
+import Auctions from './pages/Auctions';
+import AuctionItem from './pages/AuctionItem';
 
 const App = () => {
   // Get user data based on their profile
@@ -20,7 +24,10 @@ const App = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    // We're fetching data here and chldren component access using useSelector
     dispatch(fetchUser());
+    dispatch(getAllAuctionItems());
+    dispatch(fetchLeaderboard());
   }, [dispatch]);
 
   return (
@@ -33,6 +40,9 @@ const App = () => {
         <Route path='/submit-commission' element={<SubmitCommission />} />
         <Route path='/how-it-works-info' element={<HowItWorks />} />
         <Route path='/about' element={<About />} />
+        <Route path='/leaderboard' element={<Leaderboard />} />
+        <Route path='/auctions' element={<Auctions />} />
+        <Route path='/auction/item/:id' element={<AuctionItem />} />
         <Route />
       </Routes>
 

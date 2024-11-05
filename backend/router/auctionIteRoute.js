@@ -27,6 +27,13 @@ auctionRouter.get(
   getMyAuctionItems
 );
 
+auctionRouter.get(
+  '/auction/:id',
+  isAuthenticated,
+  isAuthorised('Auctioneer'),
+  getAuctionDetails
+);
+
 auctionRouter.delete(
   '/delete/:id',
   isAuthenticated,

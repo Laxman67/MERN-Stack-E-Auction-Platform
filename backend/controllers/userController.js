@@ -6,7 +6,6 @@ import { generateToken } from '../utils/JwtToken.js';
 
 export const register = catchAsyncErrors(async (req, res, next) => {
   if (!req.files || Object.keys(req.files).length === 0) {
-    
     return next(new ErrorHandler('Profile Image Required.', 400));
   }
 
