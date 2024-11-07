@@ -30,16 +30,12 @@ const auctionSlice = createSlice({
       state.loading = true;
     },
     getAuctionDetailSuccess(state, action) {
-      state.loading = true;
+      state.loading = false;
       state.auctionDetail = action.payload.auctionItem;
       state.auctionBidders = action.payload.bidders;
     },
     getAuctionDetailFailed(state) {
       state.loading = false;
-      // eslint-disable-next-line no-self-assign
-      state.auctionDetail = state.auctionDetail;
-      // eslint-disable-next-line no-self-assign
-      state.auctionBidders = state.auctionBidders;
     },
 
     resetSlice(state) {
@@ -67,6 +63,7 @@ export const getAllAuctionItems = () => async (dispatch) => {
     dispatch(auctionSlice.actions.resetSlice());
   }
 };
+
 export const getAuctionDetail = (id) => async (dispatch) => {
   dispatch(auctionSlice.actions.getAuctionDetailRequest());
 
@@ -76,7 +73,7 @@ export const getAuctionDetail = (id) => async (dispatch) => {
     });
 
     dispatch(auctionSlice.actions.getAuctionDetailSuccess(response.data));
-
+    toast.error(response.data.message);
     dispatch(auctionSlice.actions.resetSlice());
   } catch (error) {
     dispatch(auctionSlice.actions.getAuctionDetailFailed());

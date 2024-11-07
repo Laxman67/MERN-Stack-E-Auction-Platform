@@ -30,7 +30,7 @@ auctionRouter.get(
 auctionRouter.get(
   '/auction/:id',
   isAuthenticated,
-  isAuthorised('Auctioneer'),
+  isAuthorised('Auctioneer', 'Bidder'),
   getAuctionDetails
 );
 

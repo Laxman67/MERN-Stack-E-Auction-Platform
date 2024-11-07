@@ -1,4 +1,5 @@
 import { getAuctionDetail } from '@/store/slices/AuctionSlice';
+import { placeBid } from '@/store/slices/bidSlice';
 import { useEffect, useState } from 'react';
 import { FaGreaterThan } from 'react-icons/fa';
 import { RiAuctionFill } from 'react-icons/ri';
@@ -16,11 +17,12 @@ const AuctionItem = () => {
   const dispatch = useDispatch();
 
   const [amount, setAmount] = useState(0);
-  const handleBid = () => {
+  const handleBid = (e) => {
+    e.preventDefault();
+
     const formData = new FormData();
     formData.append('amount', amount);
-    //TODO
-    // dispatch(placeBid(id, formData));
+    dispatch(placeBid(id, formData));
     dispatch(getAuctionDetail(id));
   };
 
@@ -31,7 +33,7 @@ const AuctionItem = () => {
     if (id) {
       dispatch(getAuctionDetail(id));
     }
-  }, [isAuthenticated, dispatch, id, navigateTo]);
+  }, [isAuthenticated]);
   return (
     <>
       <section className='w-full ml-0 m-0 h-fit px-5 pt-20 lg:pl-[320px] flex flex-col'>
@@ -53,9 +55,7 @@ const AuctionItem = () => {
           <p className='text-stone-600'>{auctionDetail.title}</p>
         </div>
         {loading ? (
-          //TOSO
-          // <Spinner />
-          'Loading....'
+          'loading...'
         ) : (
           <div className='flex gap-4 flex-col lg:flex-row'>
             <div className='flex-1 flex flex-col gap-3'>
@@ -173,9 +173,11 @@ const AuctionItem = () => {
                         className='w-32 focus:outline-none md:text-[20px] p-1'
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
+                        name='amount'
                       />
                     </div>
                     <button
+                      type='submit'
                       className='p-4 text-white bg-black rounded-full transition-all duration-300 hover:bg-[#222]'
                       onClick={handleBid}
                     >
